@@ -23,18 +23,18 @@ under the License.
 
 // BACKGROUND COLORS
 ////////////////////
-$nav-bg: #393939;
-$examples-bg: #393939;
+$nav-bg: #fdfdfd; // 393939
+$examples-bg: #292929; // 393939
 $code-bg: #292929;
 $code-annotation-bg: #1c1c1c;
-$nav-subitem-bg: #262626;
-$nav-active-bg: #2467af;
+$nav-subitem-bg: #fdfdfd; // 262626
+$nav-active-bg: #fdfdfd; // 2467af
 $lang-select-border: #000;
 $lang-select-bg: #222;
 $lang-select-active-bg: $examples-bg; // feel free to change this to blue or something
 $lang-select-pressed-bg: #111; // color of language tab bg when mouse is pressed
-$main-bg: #eaf2f6;
-$aside-notice-bg: #8fbcd4;
+$main-bg: #fdfdfd;
+$aside-notice-bg: #DAF2FC;
 $aside-warning-bg: #c97a7e;
 $aside-success-bg: #6ac174;
 
@@ -42,8 +42,8 @@ $aside-success-bg: #6ac174;
 // TEXT COLORS
 ////////////////////
 $main-text: #333; // main content text color
-$nav-text: #fff;
-$nav-active-text: #fff;
+$nav-text: #008cdd;
+$nav-active-text: #666;
 $lang-select-text: #fff; // color of unselected language tab text
 $lang-select-active-text: #fff; // color of selected language tab text
 $lang-select-pressed-text: #fff; // color of language tab text when mouse is pressed
@@ -60,12 +60,15 @@ $nav-indent: 10px; // extra padding for ToC subitems
 $code-annotation-padding: 13px; // padding inside code annotations
 $h1-margin-bottom: 21px; // padding under the largest header tags
 
+$title-border-top: 1px solid #ddd;
+
 
 // FONTS
 ////////////////////
 %default-font {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 13px;
+  font-family: Helvetica, Arial, sans-serif;
+  //font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
 }
 
 %header-font {
@@ -81,10 +84,10 @@ $h1-margin-bottom: 21px; // padding under the largest header tags
 
 // OTHER
 ////////////////////
-$nav-active-shadow: #000;
-$nav-footer-border-color: #666;
-$nav-embossed-border-top: 1px solid #000;
-$nav-embossed-border-bottom: 1px solid #404040;
+$nav-active-shadow: #fdfdfd;
+$nav-footer-border-color: #fdfdfd;
+$nav-embossed-border-top: 1px solid #fafafa;
+$nav-embossed-border-bottom: 1px solid #fff;
 $main-embossed-text-shadow: 0px 1px 0px #fff;
 
 

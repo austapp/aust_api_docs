@@ -4,164 +4,86 @@ title: API Reference
 language_tabs:
   - shell
   - ruby
-  - python
 
 toc_footers:
   - <a href='#'>Sign Up for a Developer Key</a>
   - <a href='http://github.com/tripit/slate'>Documentation Powered by Slate</a>
 
 includes:
+  - endpoints
   - errors
 
 ---
 
-# Introduction
+# Introdução
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+Bem-vindo à API do Aust! Você pode usar as URLs da nossa API para acessar
+informações sobre estoque, pessoas, pedidos e muito mais.
 
-We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
+Na área escura à direita você pode ver exemplos que você pode reproduzir com
+o seu shell.
 
-This example API documentation page was created with [Slate](http://github.com/tripit/slate). Feel free to edit it and use it as a base for your own API's documentation.
+# Autorização
 
-# Authentication
-
-> To authorize, use this code:
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
-
-```python
-import 'kittn'
-
-api = Kittn.authorize('meowmeowmeow')
-```
+> Para autenticar uma requisição, envie no cabeçalho sua API token:
 
 ```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
+# No shell, -H significa Header (cabeçalho)
+curl -H "Token: 123456789"
+     "URL_DA_API"
 ```
 
-> Make sure to replace `meowmeowmeow` with your API key.
+Todo usuário do Aust possui uma chave única para acesso à API chamada
+**API Token**. Você pode copiar a sua na página **Configurações** do seu
+painel de administração. Ela é secreta e você não deve compartilhá-la com
+ninguém.
 
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
+O Aust espera que você inclua sua API token em todas as requisições em
+um cabeçalho chamado `Token`, como no exemplo a seguir:
 
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
+`curl -H "Token: $API_TOKEN" "https://seudominio.com/api/v1/people.json"`
 
 <aside class="notice">
-You must replace `meowmeowmeow` with your personal API key.
+Você deve substituir $API_TOKEN com sua token verdadeira.
 </aside>
 
-# Kittens
+Com isto, o Aust autentica sua requisição e pode identificar o usuário que
+está realizando as operações.
 
-## Get All Kittens
+# Paginação
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import 'kittn'
-
-api = Kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
-
-```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
-```
-
-> The above command returns JSON structured like this:
+> Por exemplo, além da entidade, você também tem acesso ao atributo **meta**.
 
 ```json
 [
   {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Isis",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
+    "person": {
+      "id":         "35b87e73-3fec-4f2c-86dd-6afe36a0dbd2",
+      "first_name": "Luke",
+      "last_name":  "Skywalker"
+    },
+    "meta": {
+      "page":        "2",
+      "total_pages": "95"
+    }
   }
 ]
 ```
 
-This endpoint retrieves all kittens.
+Quando você acessa uma URL da API, você recebe registros divididos por páginas.
 
-### HTTP Request
+No exemplo à direita, a entidade **meta** está presente. Com ela você é informado
+da página atual e do total de páginas.
 
-`GET http://example.com/kittens`
+Com estas informações em mãos, você pode realizar requisições adicionais
+para ler as demais páginas desejadas.
 
-### Query Parameters
+Para especificar uma página, use o atributo `page`, como no exemplo abaixo:
 
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
+`curl "https://seudominio.com/api/v1/people.json?page=3"`
 
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
+Neste caso, a página 3 será retornada.
+
+<aside class="notice">
+Por simplicidade, omitiremos **meta** dos exemplos daqui em diante.
 </aside>
-
-## Get a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import 'kittn'
-
-api = Kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/3"
-  -H "Authorization: meowmeowmeow"
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-  "id": 2,
-  "name": "Isis",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
-}
-```
-
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">If you're not using an administrator API key, note that some kittens will return 403 Forbidden if they are hidden for admins only.</aside>
-
-### HTTP Request
-
-`GET http://example.com/kittens/<ID>`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-ID | The ID of the cat to retrieve
-
