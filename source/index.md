@@ -3,14 +3,16 @@ title: API Reference
 
 language_tabs:
   - shell
-  - ruby
 
 toc_footers:
   - <a href='#'>Sign Up for a Developer Key</a>
   - <a href='http://github.com/tripit/slate'>Documentation Powered by Slate</a>
 
 includes:
-  - endpoints
+  - endpoints_inventory_items
+  - endpoints_inventory_entries
+  - endpoints_orders
+  - endpoints_people
   - errors
 
 ---
@@ -20,8 +22,31 @@ includes:
 Bem-vindo à API do Aust! Você pode usar as URLs da nossa API para acessar
 informações sobre estoque, pessoas, pedidos e muito mais.
 
+<aside class="warning">
+  A API está em versão beta.
+</aside>
+
+## Como este manual funciona
+
+```shell
+Olá! Eu sou um exemplo.
+```
+
 Na área escura à direita você pode ver exemplos que você pode reproduzir com
 o seu shell.
+
+Se você não tem acesso a um terminal shell, sugerimos um plugin
+de navegador. No Chrome, adoramos o _Poster_.
+
+## URLs e domínios
+
+Nos exemplo dados, vamos omitir o domínio. Por exemplo,
+
+`GET /admin/api/v1/orders.json`
+
+significa uma requisição HTTP GET para o endereço acima, mas lembre-se
+de sempre incluir o seu
+domínio (ex.: `http://seudominio.com/admin/api/v1/orders.json`)
 
 # Autorização
 
@@ -41,7 +66,7 @@ ninguém.
 O Aust espera que você inclua sua API token em todas as requisições em
 um cabeçalho chamado `Token`, como no exemplo a seguir:
 
-`curl -H "Token: $API_TOKEN" "https://seudominio.com/api/v1/people.json"`
+`curl -H "Token: $API_TOKEN" "https://seudominio.com/admin/api/v1/people.json"`
 
 <aside class="notice">
 Você deve substituir $API_TOKEN com sua token verdadeira.
@@ -85,5 +110,11 @@ Para especificar uma página, use o atributo `page`, como no exemplo abaixo:
 Neste caso, a página 3 será retornada.
 
 <aside class="notice">
-Por simplicidade, omitiremos **meta** dos exemplos daqui em diante.
+  Por simplicidade, omitiremos **meta** dos exemplos daqui em diante.
 </aside>
+
+# Métodos
+
+Aqui vamos descrever cada uma das entidades que você pode interagir através
+da API.
+

@@ -1,36 +1,8 @@
-# Entidades
-
-## Itens do estoque
+# Pessoas
 
 ```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
-```
-
-Text
-
-
-## Entradas do estoque
-
-```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
-```
-
-Text
-
-## Pessoas
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```shell
-curl -u "usuario:senha"
-     "https://seudominio.com/api/v1/people.json"
+curl -H "Token: $TOKEN"
+     "https://seudominio.com/admin/api/v1/inventory_items.json"
 ```
 
 > O comando acima retorna um JSON estruturado como este:
@@ -54,6 +26,8 @@ curl -u "usuario:senha"
       "environment":            "website",
       "enabled":                true,
       "roles":                  ["customer", "supplier"],
+      "created_at":             "2014-21-04T13:00:00Z",
+      "updated_at":             "2014-25-05T14:00:00Z",
       "addresses": [
         {
           "address_1":    "Rua Um Dois Três",
@@ -86,23 +60,34 @@ A API para pessoas permite seu aplicativo acessar clientes, fornecedores,
 vendedores e outros. Não está incluído qualquer administrador, colaborador ou
 aqueles com acesso ao painel administrativo do Aust.
 
-### HTTP Request
+## Listando pessoas
 
-`GET http://example.com/kittens`
+Faça a seguinte requisição HTTP:
 
-### Query Parameters
+`GET http://seudominio.com/admin/api/v1/people.json`
 
-Parameter | Default | Description
---------- | ------- | -----------
-id |                     "35b87e73-3fec-4f2c-86dd-6afe36a0dbd2",
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
+Estes são os possíveis parâmetros:
 
-### Resposta
+Parâmetro | Description
+--------- | -----------
+id        | Se especificado, retorna apenas a pessoa com aquele ID.
+search    | Um termo que você deseja buscar. Pesquisa por nome, email e CPF/CNPJ
+role      | Qual o papel do usuário. Valores aceitos são "customer" e "supplier"
+page      | A página que você deseja ver. Se não especificado, usa o valor 1.
+
+Exemplo:
+
+`GET /admin/api/v1/people.json?search=luke+skywalker`
+
+Todas as pessoas que tiverem os termos `luke skywalker` no nome, email ou CPF/CNPJ serão retornadas.
+
+## Atributos da entidade
+
+Quando a entidade é retornada, estes são os atributos presentes.
 
 Atributo                 | Tipo    | Descrição
 ------------------------ | ------- | -----------
-id                       | String  | É um valor único para este registro.
+id                       | String  | É um valor único de identificação para cada pessoa.
 first_name               | String  | Primeiro nome da pessoa.
 last_name                | String  | Último nome da pessoa.
 email                    | String  | Email
@@ -118,48 +103,9 @@ environment              | String  | Ambiente onde o usuário foi criado.
                          |         | Possíveis valores: website, admin ou point_of_sale.
 enabled                  | Boolean | Indica se esta pessoa pode acessar sua conta.
 roles                    | Array   | Indica o papel desta pessoa, se é cliente["customer", "supplier"],
+created_at               | Date    | Data de criação do registro. Formato ISO 8601.
+updated_at               | Date    | Data da última atualização do registro. Formato ISO 8601.
 
 <aside class="success">
 Remember — a happy kitten is an authenticated kitten!
 </aside>
-
-## Get a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/3"
-  -H "Authorization: meowmeowmeow"
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-  "id": 2,
-  "name": "Isis",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
-}
-```
-
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">If you're not using an administrator API key, note that some kittens will return 403 Forbidden if they are hidden for admins only.</aside>
-
-### HTTP Request
-
-`GET http://example.com/kittens/<ID>`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-ID | The ID of the cat to retrieve
-

@@ -82,6 +82,16 @@ html, body {
     @include transition-property('background');
     @include transition-timing-function('linear');
     @include transition-duration(230ms);
+
+    &[data-unique='métodos'] {
+      margin-top: 10px;
+      font-size: 12px;
+      a {
+        color: #777;
+        font-weight: normal;
+        text-transform: uppercase;
+      }
+    }
   }
 
   // This is the currently selected ToC entry
@@ -209,7 +219,7 @@ html, body {
   z-index: 30;
 
 
-  &>h1, &>h2, &>h3, &>p, &>table, &>ul, &>ol, &>aside, &>dl {
+  &>h1, &>h2, &>h3, &>h4, &>p, &>table, &>ul, &>ol, &>aside, &>dl {
     margin-right: $examples-width;
     padding: 0 $main-padding;
     @include box-sizing(border-box);
@@ -252,7 +262,7 @@ html, body {
 
   h2 {
     @extend %header-font;
-    font-size: 20px;
+    font-size: 22px;
     margin-top: 4em;
     margin-bottom: 0;
     border-top: 1px solid #ccc;
@@ -273,7 +283,7 @@ html, body {
 
   h3 {
     @extend %header-font;
-    font-size: 12px;
+    font-size: 16px;
     margin-top: 2.5em;
     margin-bottom: 0.8em;
     text-transform: uppercase;
