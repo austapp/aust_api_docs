@@ -17,7 +17,7 @@ includes:
 
 ---
 
-# Introdução
+# Introdução à API
 
 Bem-vindo à API do Aust! Você pode usar as URLs da nossa API para acessar
 informações sobre estoque, pessoas, pedidos e muito mais.
@@ -32,13 +32,18 @@ informações sobre estoque, pessoas, pedidos e muito mais.
 Olá! Eu sou um exemplo.
 ```
 
-Na área escura à direita você pode ver exemplos que você pode reproduzir com
-o seu shell.
+> Nesta área, você vê exemplos de como utilizar a API.
+
+Na área escura à direita você pode ver exemplos de como interagir com a API
+relativo à seção que você está.
 
 Se você não tem acesso a um terminal shell, sugerimos um plugin
 de navegador. No Chrome, adoramos o _Poster_.
 
-## URLs e domínios
+Na esquerda, você encontra um índice inteligente, que segue a seção que você
+estiver. Experimente rolar a página para baixo para ver o que acontece.
+
+### URLs e domínios
 
 Nos exemplo dados, vamos omitir o domínio. Por exemplo,
 

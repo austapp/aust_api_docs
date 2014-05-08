@@ -59,7 +59,7 @@ html, body {
     padding-left: 5px;
   }
 
-  .tocify-item>a, .toc-footer li {
+  .tocify-item.header, .tocify-item>a, .toc-footer li {
     padding: 0 $nav-padding 0 $nav-padding;
     display:block;
     overflow-x:hidden;
@@ -83,10 +83,10 @@ html, body {
     @include transition-timing-function('linear');
     @include transition-duration(230ms);
 
-    &[data-unique='métodos'] {
+    &.header, &[data-unique='métodos'] {
       margin-top: 10px;
       font-size: 12px;
-      a {
+      &, a {
         color: #777;
         font-weight: normal;
         text-transform: uppercase;
@@ -448,7 +448,7 @@ html, body {
   h2 + pre + pre.ruby,
   h2 + pre + pre.shell {
     border-top: 1px solid #666;
-    margin-top: 21px;
+    margin-top: 14px;
     padding-top: 75px;
   }
 

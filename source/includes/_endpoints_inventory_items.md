@@ -74,6 +74,21 @@ Retornará apenas itens à venda.
 
 Retornará apenas itens que contenham a palavra chave `nike`.
 
+## Lendo um item específico
+
+`GET /admin/api/v1/inventory_items/<ID_DO_ITEM>`
+
+Você deve especificar o ID do item que você deseja ver.
+
+Não há parâmetros disponíveis.
+
+### Exemplos
+
+`GET /admin/api/v1/inventory_items/3`
+
+Retornará apenas o item que tem o ID 3
+
+
 ## Criando itens
 
 `POST /admin/api/v1/inventory_items`
