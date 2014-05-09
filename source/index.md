@@ -5,13 +5,13 @@ language_tabs:
   - shell
 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
-  - <a href='http://github.com/tripit/slate'>Documentation Powered by Slate</a>
+  - <a href='https://austapp.com'>Visitar o Aust</a>
 
 includes:
   - endpoints_inventory_items
   - endpoints_inventory_entries
   - endpoints_orders
+  - endpoints_order_items
   - endpoints_people
   - errors
 
@@ -23,7 +23,7 @@ Bem-vindo à API do Aust! Você pode usar as URLs da nossa API para acessar
 informações sobre estoque, pessoas, pedidos e muito mais.
 
 <aside class="warning">
-  A API está em versão beta.
+  A API está em versão beta. Algumas alterações ainda podem acontecer.
 </aside>
 
 ## Como este manual funciona
@@ -42,6 +42,15 @@ de navegador. No Chrome, adoramos o _Poster_.
 
 Na esquerda, você encontra um índice inteligente, que segue a seção que você
 estiver. Experimente rolar a página para baixo para ver o que acontece.
+
+### Métodos e entidades
+
+No menu à esquerda, você vê diversos métodos (ex.: Itens do Estoque, Pedidos etc).
+Lá descrevemos como acessar e interagir com cada URL.
+
+Há ainda uma seção especial em cada método chamada **A entidade**.
+Lá damos detalhes sobre cada entidade. Sempre que precisar, pule
+para esta seção.
 
 ### URLs e domínios
 
@@ -80,24 +89,49 @@ Você deve substituir $API_TOKEN com sua token verdadeira.
 Com isto, o Aust autentica sua requisição e pode identificar o usuário que
 está realizando as operações.
 
+# IDs e chaves estrangeiras
+
+> UUID tem o formato do ID a seguir:
+
+```shell
+{
+  "person": {
+    "id":         "35b87e73-3fec-4f2c-86dd-6afe36a0dbd2",
+    "first_name": "Luke",
+    "last_name":  "Skywalker"
+  }
+}
+```
+Todo registro possui um valor único que o identifica. Nós o chamamos de ID.
+Este ID possui o formato UUID para que evitemos duplicações.
+
+Quando criando um registro, você pode enviar um ID próprio, desde que
+esteja no formato UUID. Desta forma você
+consegue manter uma referência remota a um registro que foi criado localmente.
+
+Caso você não especifique um ID, nós vamos gerar um no formato UUID
+automaticamente e enviá-lo na resposta à sua requisição.
+
+Caso você especifique um ID inválido, ou seja, não usando formato UUID, nós
+retornaremos uma mensagem de erro indicando o problema. Veja detalhes na seção
+_Erros_.
+
 # Paginação
 
 > Por exemplo, além da entidade, você também tem acesso ao atributo **meta**.
 
 ```json
-[
-  {
-    "person": {
-      "id":         "35b87e73-3fec-4f2c-86dd-6afe36a0dbd2",
-      "first_name": "Luke",
-      "last_name":  "Skywalker"
-    },
-    "meta": {
-      "page":        "2",
-      "total_pages": "95"
-    }
+{
+  "people": [{
+    "id":         "35b87e73-3fec-4f2c-86dd-6afe36a0dbd2",
+    "first_name": "Luke",
+    "last_name":  "Skywalker"
+  }],
+  "meta": {
+    "page":        "2",
+    "total_pages": "95"
   }
-]
+}
 ```
 
 Quando você acessa uma URL da API, você recebe registros divididos por páginas.

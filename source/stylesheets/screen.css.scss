@@ -238,7 +238,7 @@ html, body {
 
   h1 {
     @extend %header-font;
-    font-size: 30px;
+    font-size: 36px;
     padding-top: 0.7em;
     padding-bottom: 0.5em;
     border-bottom: 0px solid #ccc;
@@ -439,8 +439,8 @@ html, body {
   h1 + pre + pre.ruby,
   h1 + pre + pre.shell {
     border-top: 1px solid #666;
-    margin-top: 0px;
-    padding-top: 75px;
+    margin-top: -13px;
+    padding-top: 72px;
   }
 
   h2 + blockquote,

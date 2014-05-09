@@ -1,41 +1,5 @@
 # Itens do estoque
 
-```shell
-curl -H "Token: $TOKEN"
-     "https://seudominio.com/admin/api/v1/inventory_items"
-```
-
-> O comando acima retorna um JSON estruturado como este:
-
-```json
-[
-  {
-    "inventory_items": {
-      "id":               "35b87e73-3fec-4f2c-86dd-6afe36a0dbd2",
-      "name":             "Air Max",
-      "description":      "Tênis de corrida Air Max",
-      "year":             "2011",
-      "price":            179.90,
-      "on_sale":          true,
-      "barcode":          "5555-5555",
-      "reference_number": "seu_numero_personalizado",
-      "created_at":       "2014-21-04T13:00:00Z",
-      "updated_at":       "2014-25-05T14:00:00Z",
-      "manufacturer": {
-        "id":   "72188e72-1fec-3f6c-37dd-6afe36a0dbd2",
-        "name": "Nike"
-      },
-      "taxonomy": {
-        "id":   "83216e35-3fec-1d2c-37dd-6afe36a0dbd2",
-        "name": "Tênis"
-      }
-    }
-  }
-]
-```
-
-> Cada requisição, seja de listagem, criação ou atualização, retorna a entidade como descrita acima.
-
 A API para itens do estoque permite seu aplicativo acessar todos os registros.
 Você pode listar, criar e editar itens.
 
@@ -53,16 +17,61 @@ de uma mercadoria. Cada Entrada possui um quantidade e um custo unitário.
 
 ## Listando itens
 
+```shell
+curl -H "Token: $TOKEN"
+     "https://seudominio.com/admin/api/v1/inventory_items"
+```
+
+> O comando acima retorna um JSON estruturado como este:
+
+```json
+{
+  "inventory_items": [{
+    "id":               "35b87e73-3fec-4f2c-86dd-6afe36a0dbd2",
+    "name":             "Air Max",
+    "description":      "Tênis de corrida Air Max",
+    "year":             "2011",
+    "price":            179.90,
+    "on_sale":          true,
+    "barcode":          "5555-5555",
+    "reference_number": "seu_numero_personalizado",
+    "manufacturer_id":  "72188e72-1fec-3f6c-37dd-6afe36a0dbd2",
+    "taxonomy_id":      "83216e35-3fec-1d2c-37dd-6afe36a0dbd2",
+    "created_at":       "2014-21-04T13:00:00Z",
+    "updated_at":       "2014-25-05T14:00:00Z"
+  }],
+  "manufacturers": [{
+    "id":   "72188e72-1fec-3f6c-37dd-6afe36a0dbd2",
+    "name": "Nike"
+  }],
+  "taxonomies": [{
+    "id":   "83216e35-3fec-1d2c-37dd-6afe36a0dbd2",
+    "name": "Tênis"
+  }]
+}
+```
+
+> Cada requisição, seja de listagem, criação ou atualização, retorna a entidade como descrita acima.
+
+
 `GET /admin/api/v1/inventory_items`
 
 Estes são os possíveis parâmetros:
 
-Parâmetro | Description
+Parâmetro | Descrição
 --------- | -----------
 id        | Se especificado, retorna apenas o registro com ID correspondente.
 search    | Um termo que você deseja buscar. Pesquisa por nome, descrição, código de barras, número de referência, nome do fabricante, nome da categoria.
 on_sale   | Especifique 1 se você quer apenas itens a venda, 0 (zero) para itens não à venda.
 page      | A página que você deseja ver. Se não especificado, usa o valor 1.
+
+A resposta:
+
+Entidade        | Chave             | Descrição
+--------------- | ----------------- | ---------
+Item do estoque | `inventory_items` | Os registros desejados.
+Fabricante      | `manufacturer`    | O Fabricante da mercadoria.
+Categoria       | `taxonomy`        | Categoria que a mercadoria faz parte.
 
 ### Exemplos
 
@@ -76,11 +85,46 @@ Retornará apenas itens que contenham a palavra chave `nike`.
 
 ## Lendo um item específico
 
+```json
+{
+  "inventory_item": {
+    "id":               "35b87e73-3fec-4f2c-86dd-6afe36a0dbd2",
+    "name":             "Air Max",
+    "description":      "Tênis de corrida Air Max",
+    "year":             "2011",
+    "price":            179.90,
+    "on_sale":          true,
+    "barcode":          "5555-5555",
+    "reference_number": "seu_numero_personalizado",
+    "manufacturer_id":  "72188e72-1fec-3f6c-37dd-6afe36a0dbd2",
+    "taxonomy_id":      "83216e35-3fec-1d2c-37dd-6afe36a0dbd2",
+    "created_at":       "2014-21-04T13:00:00Z",
+    "updated_at":       "2014-25-05T14:00:00Z"
+  },
+  "manufacturers": [{
+    "id":   "72188e72-1fec-3f6c-37dd-6afe36a0dbd2",
+    "name": "Nike"
+  }],
+  "taxonomies": [{
+    "id":   "83216e35-3fec-1d2c-37dd-6afe36a0dbd2",
+    "name": "Tênis"
+  }]
+}
+```
+
 `GET /admin/api/v1/inventory_items/<ID_DO_ITEM>`
 
 Você deve especificar o ID do item que você deseja ver.
 
 Não há parâmetros disponíveis.
+
+A resposta contém:
+
+Entidade        | Chave             | Descrição
+--------------- | ----------------- | ---------
+Item do estoque | `inventory_item`  | O item desejado.
+Fabricante      | `manufacturer`    | O Fabricante da mercadoria.
+Categoria       | `taxonomy`        | Categoria que a mercadoria faz parte.
 
 ### Exemplos
 
@@ -88,6 +132,9 @@ Não há parâmetros disponíveis.
 
 Retornará apenas o item que tem o ID 3
 
+<aside class="notice">
+Note como a chave está no singular, `inventory_item`.
+</aside>
 
 ## Criando itens
 
@@ -104,9 +151,10 @@ price\*            | Float   | Preço do item, ex.: 10.12
 on_sale          | Boolean | _true_ se estiver à venda, _false_ caso contrário
 barcode          | String  | Código de barras do produto.
 reference_number | String  | Número de referência personalizado. Se você possui uma identificação própria, você pode usá-la aqui.
-manufacturer_id\*  | String  | ID único do fabricante do item. Obrigatório apenas se você não especificar um nome para o fabricante.
-manufacturer_name\* | String | Caso queira criar um novo fabricante, deixe seu ID em branco e especifique uma string aqui. Caso o nome já exista, o fabricante anterior será utilizado. Obrigatório apenas se você não especificar um ID.
-taxonomy_id\*      | String  | ID único da categoria à qual este registro pertencerá.
+manufacturer_id  | String  | ID único do fabricante da mercadoria caso já exista.
+manufacturer_name | String | Caso queira criar um novo fabricante, deixe seu ID acima em branco e especifique uma string aqui. Caso o nome já exista, o fabricante anterior será utilizado. Obrigatório apenas se você não especificar um ID.
+taxonomy_id      | String  | ID único da categoria à qual este registro pertencerá. Altamente recomendado para organização.
+created_at           | Date   | Data de criação do registro no formato ISO 8601. Se não especificado, nós a definiremos automaticamente.
 
 Em caso de sucesso, você receberá de volta a entidade criada. Caso contrário,
 uma mensagem de erro.
@@ -129,9 +177,9 @@ price\*            | Float   | Preço do item, ex.: 10.12
 on_sale          | Boolean | _true_ se estiver à venda, _false_ caso contrário
 barcode          | String  | Código de barras do produto.
 reference_number | String  | Número de referência personalizado. Se você possui uma identificação própria, você pode usá-la aqui.
-manufacturer_id\*  | String  | ID único do fabricante do item. Obrigatório apenas se você não especificar um nome para o fabricante.
-manufacturer_name\* | String | Caso queira criar um novo fabricante, deixe seu ID em branco e especifique uma string aqui. Caso o nome já exista, o fabricante anterior será utilizado. Obrigatório apenas se você não especificar um ID.
-taxonomy_id\*      | String  | ID único da categoria à qual este registro pertencerá.
+manufacturer_id  | String  | ID único do fabricante da mercadoria caso já exista.
+manufacturer_name | String | Caso queira criar um novo fabricante, deixe seu ID acima em branco e especifique uma string aqui. Caso o nome já exista, o fabricante anterior será utilizado. Obrigatório apenas se você não especificar um ID.
+taxonomy_id      | String  | ID único da categoria à qual este registro pertencerá. Altamente recomendado para organização.
 
 <aside class="notice">
 Não é possível alterar o ID de um registro.
@@ -154,7 +202,7 @@ price                    | Float   | Preço do item, ex.: 10.12
 on_sale                  | Boolean | Retorna true se estiver à venda.
 barcode                  | String  | Código de barras do produto.
 reference_number         | String  | Número de referência personalizado.
-manufacturer             | Entidade | Entidade do fabricante do item.
-taxonomy                 | Entidade | Entidade da categoria que o item pertence.
+manufacturer_id          | String  | ID da entidade do fabricante da mercadoria.
+taxonomy_id              | String  | ID da entidade da categoria que o item pertence.
 created_at               | Date    | Data de criação do registro. Formato ISO 8601.
 updated_at               | Date    | Data da última atualização do registro. Formato ISO 8601.

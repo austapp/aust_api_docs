@@ -62,6 +62,13 @@ Parâmetro | Description
 on_sale   | Especifique 1 se você quer apenas entradas à venda, 0 (zero) para entradas não à venda.
 page      | A página que você deseja ver. Se não especificado, usa o valor 1.
 
+A resposta contém:
+
+Entidade        | Chave             | Descrição
+--------------- | ----------------- | ---------
+Entrada do estoque | `inventory_entries`  | As entradas requisitadas.
+Item do estoque | `inventory_item`  | O item associado.
+
 ### Exemplos
 
 `GET /admin/api/v1/inventory_items/2/entries`
@@ -101,6 +108,7 @@ cost_per_unit\*| Float   | Custo por item, em R$, ex.: 10.12
 on_sale\*      | Boolean | _true_ se estiver à venda, _false_ caso contrário
 website_sale\* | Boolean | _true_ para disponibilizar à venda no e-commerce, _false_ caso contrário
 point_of_sale\*| Boolean | _true_ para disponibilizar à venda no ponto de venda, _false_ caso contrário
+created_at           | Date   | Data de criação do registro no formato ISO 8601. Se não especificado, nós a definiremos automaticamente.
 
 Em caso de sucesso, você receberá de volta a entidade criada. Caso contrário,
 uma mensagem de erro.

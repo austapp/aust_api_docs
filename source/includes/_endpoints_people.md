@@ -1,5 +1,11 @@
 # Pessoas
 
+A API para pessoas permite seu aplicativo acessar clientes, fornecedores,
+vendedores e outros. Não está incluído qualquer administrador, colaborador ou
+aqueles com acesso ao painel administrativo do Aust.
+
+## Listando pessoas
+
 ```shell
 curl -H "Token: $TOKEN"
      "https://seudominio.com/admin/api/v1/inventory_items.json"
@@ -56,12 +62,6 @@ curl -H "Token: $TOKEN"
 ]
 ```
 
-A API para pessoas permite seu aplicativo acessar clientes, fornecedores,
-vendedores e outros. Não está incluído qualquer administrador, colaborador ou
-aqueles com acesso ao painel administrativo do Aust.
-
-## Listando pessoas
-
 Faça a seguinte requisição HTTP:
 
 `GET http://seudominio.com/admin/api/v1/people.json`
@@ -75,7 +75,13 @@ search    | Um termo que você deseja buscar. Pesquisa por nome, email e CPF/CNP
 role      | Qual o papel do usuário. Valores aceitos são "customer" e "supplier"
 page      | A página que você deseja ver. Se não especificado, usa o valor 1.
 
-Exemplo:
+A resposta contém:
+
+Entidade        | Chave      | Descrição
+--------------- | ---------- | ---------
+Pessoa          | `people`   | A pessoa requisitada.
+
+### Exemplos
 
 `GET /admin/api/v1/people.json?search=luke+skywalker`
 
@@ -105,7 +111,3 @@ enabled                  | Boolean | Indica se esta pessoa pode acessar sua cont
 roles                    | Array   | Indica o papel desta pessoa, se é cliente["customer", "supplier"],
 created_at               | Date    | Data de criação do registro. Formato ISO 8601.
 updated_at               | Date    | Data da última atualização do registro. Formato ISO 8601.
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
