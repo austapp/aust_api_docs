@@ -68,7 +68,7 @@ Faça a seguinte requisição HTTP:
 
 Estes são os possíveis parâmetros:
 
-Parâmetro | Description
+Parâmetro | Descrição
 --------- | -----------
 id        | Se especificado, retorna apenas a pessoa com aquele ID.
 search    | Um termo que você deseja buscar. Pesquisa por nome, email e CPF/CNPJ

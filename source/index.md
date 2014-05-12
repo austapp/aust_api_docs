@@ -43,7 +43,7 @@ de navegador. No Chrome, adoramos o _Poster_.
 Na esquerda, você encontra um índice inteligente, que segue a seção que você
 estiver. Experimente rolar a página para baixo para ver o que acontece.
 
-### Métodos e entidades
+## Métodos e entidades
 
 No menu à esquerda, você vê diversos métodos (ex.: Itens do Estoque, Pedidos etc).
 Lá descrevemos como acessar e interagir com cada URL.
@@ -52,7 +52,7 @@ Há ainda uma seção especial em cada método chamada **A entidade**.
 Lá damos detalhes sobre cada entidade. Sempre que precisar, pule
 para esta seção.
 
-### URLs e domínios
+## URLs e domínios
 
 Nos exemplo dados, vamos omitir o domínio. Por exemplo,
 
@@ -61,6 +61,60 @@ Nos exemplo dados, vamos omitir o domínio. Por exemplo,
 significa uma requisição HTTP GET para o endereço acima, mas lembre-se
 de sempre incluir o seu
 domínio (ex.: `http://seudominio.com/admin/api/v1/orders.json`)
+
+## IDs e chaves estrangeiras
+
+> UUID tem o formato do ID a seguir:
+
+```shell
+{
+  "person": {
+    "id":         "35b87e73-3fec-4f2c-86dd-6afe36a0dbd2",
+    "first_name": "Luke",
+    "last_name":  "Skywalker"
+  }
+}
+```
+
+Todo registro possui um valor único que o identifica. Nós o chamamos de ID.
+Este ID possui o formato UUID para que evitemos duplicações.
+
+Quando criando um registro, você pode enviar um ID próprio, desde que
+esteja no formato UUID. Desta forma você
+consegue manter uma referência remota a um registro que foi criado localmente.
+
+Caso você não especifique um ID, nós vamos gerar um no formato UUID
+automaticamente e enviá-lo na resposta à sua requisição.
+
+Caso você especifique um ID inválido, ou seja, não usando formato UUID, nós
+retornaremos uma mensagem de erro indicando o problema. Veja detalhes na seção
+_Erros_.
+
+## Caracteres especiais em URLs
+
+Embora uma URL com caracteres inválidos possa funcionar, nós recomendamos
+a utilização de caracteres codificados. A
+[RFC3986](http://tools.ietf.org/html/rfc3986) define o que esperar em uma
+URL.
+
+Se você precisar utilizar caracteres especiais em uma URL, recomendamos que
+você substitua-os por um caractere codificado. Por exemplo,
+
+`/admin?ids=1,2,3`
+
+é uma URL inválida porque vírgulas são consideradas caracteres reservados.
+A URL abaixo, entretanto, é totalmente válida:
+
+`/admin?ids=1%2C2%2C3%2C`
+
+Para ver a lista completa de caracteres codificados,
+[veja esta página](http://www.w3schools.com/tags/ref_urlencode.asp) que inclui
+o `%2C` acima.
+
+<aside class="notice">
+Em vez de `%2C`, mostraremos caracteres como `,` neste manual para melhorar
+a legibilidade.
+</aside>
 
 # Autorização
 
@@ -89,32 +143,6 @@ Você deve substituir $API_TOKEN com sua token verdadeira.
 Com isto, o Aust autentica sua requisição e pode identificar o usuário que
 está realizando as operações.
 
-# IDs e chaves estrangeiras
-
-> UUID tem o formato do ID a seguir:
-
-```shell
-{
-  "person": {
-    "id":         "35b87e73-3fec-4f2c-86dd-6afe36a0dbd2",
-    "first_name": "Luke",
-    "last_name":  "Skywalker"
-  }
-}
-```
-Todo registro possui um valor único que o identifica. Nós o chamamos de ID.
-Este ID possui o formato UUID para que evitemos duplicações.
-
-Quando criando um registro, você pode enviar um ID próprio, desde que
-esteja no formato UUID. Desta forma você
-consegue manter uma referência remota a um registro que foi criado localmente.
-
-Caso você não especifique um ID, nós vamos gerar um no formato UUID
-automaticamente e enviá-lo na resposta à sua requisição.
-
-Caso você especifique um ID inválido, ou seja, não usando formato UUID, nós
-retornaremos uma mensagem de erro indicando o problema. Veja detalhes na seção
-_Erros_.
 
 # Paginação
 

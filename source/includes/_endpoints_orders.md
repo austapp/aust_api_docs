@@ -34,6 +34,7 @@ curl -H "Token: $TOKEN"
     "id":               "35b87e73-3fec-4f2c-86dd-6afe36a0dbd2",
     "total":            180.5,
     "environment":      "point_of_sale",
+    "approved":         true,
     "customer_id":      "72188e72-1fec-3f6c-37dd-6afe36a0dbd2",
     "order_item_ids": [
       "24b26e45-2fec-3f2c-86dd-6afe36a0dbd2"
@@ -52,10 +53,11 @@ curl -H "Token: $TOKEN"
 
 Estes são os possíveis parâmetros:
 
-Parâmetro | Description
+Parâmetro | Descrição
 --------- | -----------
-status    | Valores aceitos são: _pending_ para pedidos com itens pendentes, _shipped_ para os que estão despachados e _cancelled_ para aqueles que todos os itens foram cancelados
-environment | Valores aceitos são: _website_ para pedidos realizados via e-commerce e _point\_of\_sale_ para os pedidos realizados via ponto de venda.
+items_status | Busca pedidos considerando seus itens. Valores aceitos são: _pending_ para pedidos que possuem itens com envio pendentes; _shipped_ para os que estão despachados; e _cancelled_ para aqueles que todos os itens foram cancelados. <br /><br />Aceita `Array`, exemplo: <br />`?items_status=pending` ou <br />`?items_status[]=pending&items_status[]=shipped`
+approved  | Se o pedido foi aprovado por administradores e deduziu itens do estoque. Valores aceitos são `1` para aprovados e `0` (zero) para não aprovados. Veja os exemplos.<br /><br />Para buscar pedidos com _aprovação pendente_, use o valor `pending`.<br /><br />Pedidos não aprovados também são conhecidos como _Pedidos Não Empenhados_.
+environment | Local onde o pedido foi criado. Valores aceitos: _website_ para e-commerce, _point_of_sale_ para ponto de venda e _api_ para outras fontes. Se nada for especificado, usa _api_ por padrão.
 page      | A página que você deseja ver. Se não especificado, usa o valor 1.
 
 A resposta contém:
@@ -71,11 +73,25 @@ Pessoas         | `customers`       | Clientes de cada pedido.
 
 Retorna todos os pedidos.
 
-`GET /admin/api/v1/orders?status=pending`
+`GET /admin/api/v1/orders?items_status=pending`
 
 Retorna apenas pedidos que possuem alguns itens com envios pendentes.
 
-`GET /admin/api/v1/orders?environment=point_of_sale&status=pending`
+`GET /admin/api/v1/orders?items_status[]=pending&items_status[]=shipped`
+
+Retorna pedidos que possuam alguns itens pendentes e outros enviados.
+
+`GET /admin/api/v1/orders?approved=pending`
+
+Retorna apenas pedidos que estão aguardando aprovação de um administrador.
+Isto significa que não foram subtraídas quantidades de itens do estoque.
+
+`GET /admin/api/v1/orders?approved=0`
+
+Retorna apenas pedidos que não foram aprovados por administradores.
+Também conhecido como Pedidos Não Empenhados.
+
+`GET /admin/api/v1/orders?environment=point_of_sale&items_status=pending`
 
 Retorna apenas pedidos realizados através do ponto de venda e que tenha algum
 item pendente.
@@ -90,6 +106,7 @@ item pendente.
     "id":          "35b87e73-3fec-4f2c-86dd-6afe36a0dbd2",
     "total":       180.0,
     "environment": "point_of_sale",
+    "approved":    true,
     "customer_id": "72188e72-1fec-3f6c-37dd-6afe36a0dbd2",
     "order_item_ids": [
       "24b26e45-2fec-3f2c-86dd-6afe36a0dbd2"
@@ -101,6 +118,7 @@ item pendente.
     "id":                 "24b26e45-2fec-3f2c-86dd-6afe36a0dbd2",
     "price":              18.0,
     "quantity":           10.0,
+    "status":             "pending",
     "order_id":           "72b87e72-3fec-3f6c-27dd-3afe36a0dbd2",
     "inventory_item_id":  "32c38e72-1fec-3f6c-37dd-4afe36a0dbd2",
     "inventory_entry_id": "63f79e72-2fec-3f6c-57dd-6afe36a0dbd2",
@@ -141,7 +159,7 @@ Este método retorna também os itens do pedido (veja exemplo ao lado).
 ## Criando um pedido
 
 Para criar um pedido, você deve especificar na mesma requisição quais os
-itens do pedidos.
+itens do pedido.
 
 A URL para realizar a requisição é a seguinte:
 
@@ -151,6 +169,7 @@ Estes são os possíveis atributos (os obrigatórios possuem um asterísco \*):
 
 Atributo       | Tipo    | Descrição
 -------------- | ------- | -----------
+approved       | Boolean | Define se o pedido deve ser criado como aprovado. Valores aceitos: _true_ se o pedido já foi aprovado, o que subtrairá itens do estoque imediatamente.<br /><br />Deixe em branco caso esteja pendente de aprovação dos administradores, o que significa que não abateu itens do estoque ainda.<br /><br /> Defina _false_ caso o pedido deva ser criado como não aprovado (também conhecido como Pedido Não Empenhado).
 environment    | String  | Local onde o pedido foi criado. Valores aceitos: _website_ para e-commerce, _point_of_sale_ para ponto de venda e _api_ para outras fontes. Se nada for especificado, usa _api_ por padrão.
 customer_id\*  | String  | ID de uma pessoa que será definida como cliente do pedido.
 order_items\*  | Entidade | Entidade _Itens de Pedido_.
@@ -174,9 +193,7 @@ Estes são os possíveis atributos (os obrigatórios possuem um asterísco \*):
 
 Atributo       | Tipo    | Descrição
 -------------- | ------- | -----------
-environment    | String  | Local onde o pedido foi criado. Valores aceitos: _website_ para e-commerce, _point_of_sale_ para ponto de venda e _api_ para outras fontes. Se nada for especificado, usa _api_ por padrão.
-customer_id\*  | String  | ID de uma pessoa que será definida como cliente do pedido.
-
+approved       | Boolean | Define se o pedido está aprovado ou não. Valores aceitos: _true_ se o pedido já foi aprovado, o que subtrairá itens do estoque imediatamente.<br /><br />Defina _false_ caso o pedido tenha sido desaprovado (também conhecido como Pedido Não Empenhado).<br /><br />Caso ele já esteja aprovado, você não pode alterá-lo para desaprovado, e vice-versa.
 
 <aside class="notice">
 Não é possível alterar o ID de um registro. Se você deseja alterar itens do
@@ -190,15 +207,13 @@ uma mensagem de erro.
 
 Quando a entidade é retornada, estes são os atributos presentes.
 
-Atributo           | Tipo    | Descrição
------------------- | ------- | -----------
-id                 | String  | Um valor único de identificação de cada registro.
-inventory_item_id  | String  | ID do item ao qual esta entrada pertence.
-description        | String  | Descrição desta entrada.
-quantity           | Float   | Quantidade unitária deste lote/entrada.
-cost_per_unit      | Float   | Custo unitário desta entrada, ex.: 10.12
-on_sale            | Boolean | Define se esta entrada está à venda. Caso seja _false_, não será posto a venda em lugar algum.
-website_sale       | Boolean | Define se esta entrada está à venda via e-commerce.
-point_of_sale      | Boolean | Define se esta entrada está à venda via ponto de venda.
-created_at         | Date    | Data de criação do registro. Formato ISO 8601.
-updated_at         | Date    | Data da última atualização do registro. Formato ISO 8601.
+Atributo         | Tipo   | Descrição
+---------------- | ------ | -----------
+id               | String | Um valor único de identificação de cada registro.
+total            | Float  | Valor total do pedido, somando todos os itens (exceto os cancelados).
+environment      | String | Local onde o pedido foi criado. Valores possíveis: _website_ se o pedido foi feito via e-commerce, _point_of_sale_ para ponto de venda do Aust e _api_ para outras fontes (ex.: via ERP).
+customer_id      | String  | ID único do cliente final/consumidor que realizou o pedido.
+order_item_ids   | Array  | Retorna os IDs de todos os itens do pedido.
+approved         | Boolean | Define quanto à aprovação do pedido. Possíveis valores: _true_ se o pedido já foi aprovado, o que subtrairá itens do estoque imediatamente.<br /><br />_Null_ (nulo, nada) caso esteja pendente de aprovação dos administradores, o que significa que não abateu itens do estoque ainda.<br /><br /> Valor _false_ caso o pedido tenha sido desaprovado (também conhecido como Pedido Não Empenhado).
+created_at       | Date   | Data de criação do registro. Formato ISO 8601.
+updated_at       | Date   | Data da última atualização do registro. Formato ISO 8601.
