@@ -23,7 +23,11 @@ Bem-vindo à API do Aust! Você pode usar as URLs da nossa API para acessar
 informações sobre estoque, pessoas, pedidos e muito mais.
 
 <aside class="warning">
-  A API está em versão beta. Algumas alterações ainda podem acontecer.
+  A API não está terminada.
+</aside>
+
+<aside class="warning">
+  Este documento está em versão beta. Algumas alterações ainda podem acontecer.
 </aside>
 
 ## Como este manual funciona
